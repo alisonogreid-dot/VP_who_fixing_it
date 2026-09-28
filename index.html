@@ -1,0 +1,614 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solutions · Vanishing Points Week 5</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0D1117;
+  --surface: #161B22;
+  --surface2: #1C2333;
+  --border: rgba(255,255,255,0.08);
+  --text: #E6EDF3;
+  --muted: #9BA5B0;
+  --accent: #D9664C;
+  --accent-glow: rgba(217,102,76,0.15);
+  --teal: #2FB3A3;
+  --teal-glow: rgba(47,179,163,0.12);
+  --sand: #E9C46A;
+  --sand-glow: rgba(233,196,106,0.12);
+  --blue: #5B9BD5;
+  --olive: #8FA64A;
+  --serif: 'Playfair Display', Georgia, serif;
+  --sans: 'Source Sans 3', 'Segoe UI', sans-serif;
+  --mono: 'JetBrains Mono', monospace;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: var(--bg); color: var(--text); font-family: var(--sans); line-height: 1.7; font-size: 16px; -webkit-font-smoothing: antialiased; }
+a { color: var(--teal); }
+a:hover { color: var(--sand); }
+:focus-visible { outline: 2px solid var(--sand); outline-offset: 3px; }
+
+.top-bar { height: 4px; background: linear-gradient(90deg, var(--accent), var(--sand), var(--teal)); }
+
+/* HERO */
+.hero { min-height: 46vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 4rem 1.5rem; position: relative; overflow: hidden;
+  background: radial-gradient(ellipse at 30% 50%, rgba(217,102,76,0.1) 0%, transparent 55%), radial-gradient(ellipse at 70% 50%, rgba(233,196,106,0.08) 0%, transparent 55%); }
+.hero::before { content: 'SOLUTIONS'; position: absolute; font-family: var(--serif); font-size: clamp(6rem, 22vw, 18rem); font-weight: 900; color: rgba(255,255,255,0.02); top: 50%; left: 50%; transform: translate(-50%, -50%); white-space: nowrap; pointer-events: none; }
+.hero-label { font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--accent); margin-bottom: 1.3rem; }
+.hero h1 { font-family: var(--serif); font-size: clamp(2.2rem, 5.5vw, 3.8rem); font-weight: 900; line-height: 1.15; margin-bottom: 1rem; }
+.hero h1 em { font-style: italic; color: var(--accent); }
+.hero-sub { font-size: 1.1rem; color: var(--muted); max-width: 620px; }
+.hero-meta { margin-top: 1.5rem; display: flex; gap: 0.7rem; flex-wrap: wrap; justify-content: center; }
+.hero-meta span { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); background: var(--surface); padding: 0.4rem 0.8rem; border-radius: 6px; border: 1px solid var(--border); }
+
+/* NAV */
+.jump { position: sticky; top: 0; z-index: 10; background: rgba(13,17,23,0.94); backdrop-filter: blur(6px); border-bottom: 1px solid var(--border); }
+.jump .inner { max-width: 880px; margin: 0 auto; padding: 0.55rem 1.5rem; display: flex; gap: 0.4rem; flex-wrap: wrap; }
+.jump a { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); text-decoration: none; padding: 0.3rem 0.6rem; border-radius: 5px; border: 1px solid var(--border); }
+.jump a:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+.jump .day { color: var(--sand); border-color: rgba(233,196,106,0.35); }
+
+.container { max-width: 880px; margin: 0 auto; padding: 0 1.5rem; }
+section { padding: 3.2rem 0; scroll-margin-top: 3rem; }
+section + section { border-top: 1px solid var(--border); }
+
+h2 { font-family: var(--serif); font-size: 1.9rem; font-weight: 700; margin-bottom: 1.1rem; line-height: 1.25; }
+h2 .num { font-family: var(--mono); font-size: 0.74rem; color: var(--accent); letter-spacing: 0.12em; display: block; margin-bottom: 0.3rem; }
+h2 .when { font-family: var(--mono); font-size: 0.66rem; color: var(--sand); letter-spacing: 0.1em; margin-left: 0.6rem; border: 1px solid rgba(233,196,106,0.35); padding: 0.1rem 0.45rem; border-radius: 4px; vertical-align: middle; }
+h3 { font-size: 1.05rem; font-weight: 700; color: var(--teal); margin: 1.5rem 0 0.6rem; }
+p { margin-bottom: 1rem; color: var(--muted); }
+p strong, li strong { color: var(--text); font-weight: 600; }
+
+.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.4rem 1.6rem; margin-bottom: 1rem; }
+.card p:last-child { margin-bottom: 0; }
+.tint-accent { background: linear-gradient(135deg, var(--surface), rgba(217,102,76,0.08)); }
+.tint-teal { background: linear-gradient(135deg, var(--surface), rgba(47,179,163,0.08)); }
+.tint-sand { background: linear-gradient(135deg, var(--surface), rgba(233,196,106,0.07)); }
+
+.callout { background: var(--surface2); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.2rem; margin: 1rem 0; display: flex; gap: 0.8rem; align-items: flex-start; }
+.callout .ic { font-size: 1.15rem; flex-shrink: 0; margin-top: 0.1rem; }
+.callout p { margin: 0; font-size: 0.93rem; color: var(--text); }
+
+.tag { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sand); display: block; margin-bottom: 0.35rem; }
+
+/* TWO DAY PLAN */
+.days { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.day-card h4 { font-family: var(--serif); font-size: 1.2rem; margin-bottom: 0.6rem; }
+.day-card ol { padding-left: 1.2rem; color: var(--text); font-size: 0.93rem; }
+.day-card li { margin-bottom: 0.35rem; }
+.day-card .t { font-family: var(--mono); font-size: 0.7rem; color: var(--sand); }
+
+/* ACCORDION */
+.acc { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; margin-bottom: 0.8rem; overflow: hidden; }
+.acc-btn { width: 100%; background: none; border: none; color: var(--text); font-family: var(--sans); font-size: 1rem; font-weight: 600; text-align: left; padding: 1rem 1.3rem; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 1rem; min-height: 48px; }
+.acc-btn .chev { font-family: var(--mono); color: var(--accent); transition: transform 0.25s; flex-shrink: 0; }
+.acc-btn[aria-expanded="true"] .chev { transform: rotate(45deg); }
+.acc-body { display: none; padding: 0 1.3rem 1.2rem; }
+.acc-body.open { display: block; }
+
+/* RIDGE DIAGRAM */
+.ridge { display: grid; grid-template-columns: 1.1fr 1fr; gap: 1rem; align-items: start; }
+.ridge svg { width: 100%; height: auto; background: var(--surface2); border-radius: 10px; }
+.facts { list-style: none; }
+.facts li { background: var(--surface2); border-radius: 8px; padding: 0.6rem 0.9rem; margin-bottom: 0.5rem; font-size: 0.9rem; color: var(--text); }
+.facts li b { color: var(--sand); font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.06em; display: block; }
+
+/* ANGLE CARDS */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.9rem; margin: 1.2rem 0; }
+.angle { background: var(--surface); border: 2px solid var(--border); border-radius: 12px; padding: 1.2rem 1.1rem; cursor: pointer; transition: border-color 0.2s, transform 0.2s; text-align: left; color: inherit; font: inherit; }
+.angle:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.18); }
+.angle[aria-pressed="true"] { border-color: var(--sand); box-shadow: 0 0 20px var(--sand-glow); }
+.angle .lab { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.13em; text-transform: uppercase; color: var(--sand); margin-bottom: 0.4rem; display: block; }
+.angle h4 { font-family: var(--serif); font-size: 1.08rem; margin-bottom: 0.5rem; }
+.angle p { font-size: 0.86rem; margin: 0; }
+.angle .fosen { display: block; font-size: 0.8rem; color: var(--sand); font-style: italic; margin-top: 0.6rem; padding-top: 0.6rem; border-top: 1px solid var(--border); }
+#angle-out { min-height: 1.5rem; }
+
+/* TOPIC CHOOSER */
+.topics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.8rem; margin: 1.2rem 0; }
+.topic { background: var(--surface); border: 2px solid var(--border); border-radius: 10px; padding: 1rem; cursor: pointer; text-align: center; color: inherit; font: inherit; transition: border-color 0.2s; min-height: 48px; }
+.topic:hover { border-color: rgba(255,255,255,0.18); }
+.topic[aria-pressed="true"] { border-color: var(--accent); box-shadow: 0 0 18px var(--accent-glow); }
+.topic .ico { font-size: 1.5rem; }
+.topic h4 { font-size: 0.95rem; margin: 0.2rem 0; }
+.topic p { font-size: 0.78rem; margin: 0; }
+.panel { display: none; }
+.panel.active { display: block; animation: fade 0.35s; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+
+.prompt { background: var(--surface2); border-radius: 10px; padding: 0.9rem 1.2rem; margin: 0.55rem 0; font-size: 0.95rem; color: var(--text); }
+.prompt .tag { color: var(--accent); }
+
+.step-head { display: flex; align-items: center; gap: 0.7rem; margin: 1.6rem 0 0.7rem; }
+.step-head .n { width: 30px; height: 30px; border-radius: 50%; background: var(--sand); color: var(--bg); font-weight: 700; display: grid; place-items: center; flex-shrink: 0; font-size: 0.9rem; }
+.step-head h3 { margin: 0; }
+
+.link-card { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; text-decoration: none; transition: border-color 0.2s; }
+.link-card:hover { border-color: var(--teal); }
+.link-card .who { font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--teal); }
+.link-card .ttl { display: block; color: var(--text); font-weight: 600; font-size: 1rem; margin: 0.15rem 0 0.3rem; }
+.link-card .look { display: block; color: var(--muted); font-size: 0.86rem; }
+.link-card .look b { color: var(--sand); font-weight: 600; }
+
+.search-row { display: grid; grid-template-columns: 1fr auto 1fr; gap: 0.6rem; align-items: center; margin-bottom: 0.55rem; }
+.q { font-family: var(--mono); font-size: 0.8rem; padding: 0.6rem 0.8rem; border-radius: 8px; background: var(--surface); border: 1px solid var(--border); }
+.q.old { color: var(--muted); text-decoration: line-through; text-decoration-color: rgba(255,255,255,0.25); }
+.q.new { color: var(--text); border-color: rgba(233,196,106,0.4); }
+.arrow { color: var(--sand); font-family: var(--mono); }
+
+.gov { background: linear-gradient(135deg, var(--surface), rgba(217,102,76,0.09)); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.5rem; margin-top: 1.5rem; }
+.gov .tag { color: var(--accent); }
+.gov p { color: var(--text); font-size: 0.93rem; }
+
+/* SORT QUIZ */
+.sort-item { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem 1.1rem; margin-bottom: 0.6rem; }
+.sort-item .src { color: var(--text); font-size: 0.95rem; margin-bottom: 0.6rem; }
+.sort-btns { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+.sort-btns button { font: inherit; font-size: 0.85rem; font-weight: 600; padding: 0.45rem 0.9rem; border-radius: 6px; cursor: pointer; background: var(--surface2); border: 1px solid var(--border); color: var(--text); min-height: 40px; }
+.sort-btns button:hover { border-color: rgba(255,255,255,0.25); }
+.sort-fb { font-size: 0.87rem; margin-top: 0.55rem; display: none; }
+.sort-fb.show { display: block; }
+.sort-fb.ok { color: var(--olive); }
+.sort-fb.no { color: var(--sand); }
+.score { font-family: var(--mono); font-size: 0.75rem; color: var(--sand); margin-top: 0.5rem; }
+
+/* CHECK GRID */
+.checks4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; margin: 1rem 0; }
+.checks4 div { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.9rem; font-size: 0.86rem; color: var(--muted); }
+.checks4 b { display: block; color: var(--sand); font-size: 0.95rem; margin-bottom: 0.2rem; }
+
+/* DOSSIER FIELDS */
+.fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin: 1rem 0; }
+.field { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 1rem 1.1rem; }
+.field .mode { float: right; font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.15rem 0.45rem; border-radius: 4px; }
+.mode.type { color: var(--teal); border: 1px solid rgba(47,179,163,0.4); }
+.mode.hand { color: var(--sand); border: 1px solid rgba(233,196,106,0.4); }
+.field h4 { font-size: 0.98rem; color: var(--text); margin-bottom: 0.3rem; }
+.field p { font-size: 0.86rem; margin: 0; }
+.mla { font-family: var(--mono); font-size: 0.8rem; color: var(--text); background: var(--surface2); border-radius: 8px; padding: 0.8rem 1rem; margin: 0.6rem 0; line-height: 1.6; overflow-wrap: anywhere; }
+.mla i { color: var(--sand); font-style: normal; }
+
+/* BRIEF */
+.parts { margin: 1rem 0; }
+.part { display: grid; grid-template-columns: 190px 1fr; border-radius: 10px; overflow: hidden; margin-bottom: 0.55rem; border: 1px solid var(--border); }
+.part .pl { padding: 0.8rem 1rem; font-weight: 700; font-size: 0.85rem; letter-spacing: 0.03em; display: flex; align-items: center; color: #0D1117; }
+.part .pr { background: var(--surface); padding: 0.8rem 1rem; font-size: 0.92rem; color: var(--text); font-style: italic; }
+.p1 { background: var(--blue); } .p2 { background: var(--olive); } .p3 { background: var(--accent); } .p4 { background: var(--sand); }
+.model { background: var(--surface2); border-radius: 10px; padding: 1.1rem 1.3rem; font-size: 0.95rem; line-height: 1.75; }
+.model .to { color: var(--sand); font-weight: 700; display: block; margin-bottom: 0.4rem; }
+.c1 { color: #9CC4EA; } .c2 { color: #B9CF7D; } .c3 { color: #F0A58F; } .c4 { color: var(--sand); }
+.key { display: flex; gap: 1rem; flex-wrap: wrap; font-size: 0.82rem; margin-top: 0.7rem; }
+.key span::before { content: '●'; margin-right: 0.35rem; }
+
+.checklist { list-style: none; margin: 0.8rem 0; }
+.checklist li { padding: 0.65rem 0.2rem; border-bottom: 1px solid var(--border); font-size: 0.93rem; display: flex; gap: 0.6rem; cursor: pointer; user-select: none; color: var(--text); }
+.checklist li::before { content: '☐'; color: var(--teal); font-size: 1.1rem; flex-shrink: 0; line-height: 1.4; }
+.checklist li[aria-checked="true"] { color: var(--muted); text-decoration: line-through; }
+.checklist li[aria-checked="true"]::before { content: '☑'; color: var(--olive); }
+
+footer { border-top: 3px solid; border-image: linear-gradient(90deg, var(--accent), var(--sand), var(--teal)) 1; padding: 2rem 1.5rem; text-align: center; }
+footer p { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); letter-spacing: 0.06em; margin: 0.2rem 0; }
+
+@media (max-width: 720px) {
+  .days, .ridge, .grid3, .topics, .fields { grid-template-columns: 1fr; }
+  .checks4 { grid-template-columns: 1fr 1fr; }
+  .search-row { grid-template-columns: 1fr; }
+  .search-row .arrow { display: none; }
+  .part { grid-template-columns: 1fr; }
+  .card { padding: 1.2rem; }
+  h2 { font-size: 1.6rem; }
+}
+</style>
+<style>
+.cats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin: 1rem 0; }
+.src-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1rem 1.1rem; display: flex; flex-direction: column; gap: 0.45rem; }
+.src-card .top { display: flex; gap: 0.4rem; flex-wrap: wrap; align-items: center; }
+.chip { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.08em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 4px; color: #0D1117; font-weight: 500; }
+.c-dip { background: var(--blue); } .c-reg { background: var(--olive); } .c-bus { background: var(--accent); } .c-gra { background: var(--sand); }
+.slot { font-family: var(--mono); font-size: 0.6rem; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.2rem 0.5rem; border-radius: 4px; border: 1px solid var(--border); color: var(--teal); }
+.src-card a.ttl { color: var(--text); font-weight: 600; text-decoration: none; font-size: 0.98rem; }
+.src-card a.ttl:hover { color: var(--teal); text-decoration: underline; }
+.src-card .who { font-size: 0.8rem; color: var(--muted); }
+.src-card .look { font-size: 0.87rem; color: var(--muted); }
+.src-card .look b { color: var(--sand); font-weight: 600; }
+.src-card .news { font-family: var(--mono); font-size: 0.74rem; color: var(--text); background: var(--surface2); border-radius: 6px; padding: 0.45rem 0.6rem; }
+.src-card .news::before { content: 'Slot C search → '; color: var(--sand); }
+.map { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+.map th { font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--sand); text-align: left; padding: 0.5rem 0.7rem; border-bottom: 1px solid var(--border); }
+.map td { padding: 0.6rem 0.7rem; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: top; }
+.post { background: var(--surface2); border-radius: 12px; padding: 1.1rem 1.3rem; border: 1px solid rgba(233,196,106,0.3); }
+.post .row { margin-bottom: 0.7rem; font-size: 0.92rem; color: var(--text); }
+.post .row:last-child { margin-bottom: 0; }
+.post .k { font-family: var(--mono); font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sand); display: block; margin-bottom: 0.15rem; }
+.light { display: grid; grid-template-columns: 110px 1fr; border-radius: 10px; overflow: hidden; border: 1px solid var(--border); margin-bottom: 0.55rem; }
+.light .l { padding: 0.8rem; font-weight: 700; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; color: #0D1117; }
+.light .r { background: var(--surface); padding: 0.8rem 1rem; font-size: 0.9rem; color: var(--text); }
+.light .r ul { padding-left: 1.1rem; }
+.g { background: #6FBF73; } .y { background: var(--sand); } .rr { background: #E0705A; }
+.replies { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.7rem; margin: 1rem 0; }
+.replies .card h4 { font-size: 0.95rem; color: var(--sand); margin-bottom: 0.3rem; }
+.replies .card p { font-size: 0.85rem; font-style: italic; }
+.prep { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; }
+.prep .line { border-bottom: 1px dashed rgba(255,255,255,0.15); padding: 0.7rem 0; font-size: 0.93rem; color: var(--text); }
+.prep .line b { color: var(--sand); }
+.bank h4 { font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; margin: 1.2rem 0 0.5rem; }
+.bank .b-gov { color: var(--olive); } .bank .b-bus { color: var(--accent); } .bank .b-both { color: var(--sand); }
+.bank a { display: block; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: 0.7rem 0.9rem; margin-bottom: 0.45rem; text-decoration: none; color: var(--text); font-size: 0.9rem; }
+.bank a:hover { border-color: var(--teal); }
+.bank a span { display: block; color: var(--muted); font-size: 0.8rem; margin-top: 0.15rem; }
+.days3 { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 720px) {
+  .jump { position: static; }
+  .cats, .replies, .days3 { grid-template-columns: 1fr; }
+  .light { grid-template-columns: 1fr; }
+  .map { font-size: 0.8rem; }
+}
+</style>
+</head>
+<body>
+<div class="top-bar"></div>
+
+<header class="hero">
+  <div class="hero-label">Vanishing Points · Week 5</div>
+  <h1>Who's <em>fixing</em> it?</h1>
+  <p class="hero-sub">Your source hub for the week. Find who is acting on your issue (governments, UN bodies, companies, communities) and record the evidence in Slots B and C.</p>
+  <div class="hero-meta">
+    <span>Tuesday + Thursday</span>
+    <span>Slots B &amp; C</span>
+    <span>Checkpoint · Thu 19 Nov</span>
+  </div>
+</header>
+
+<nav class="jump" aria-label="Jump to section">
+  <div class="inner">
+    <a href="#how">How to use</a>
+    <a href="#hub" class="day">Source hub</a>
+    <a href="#check" class="day">Official or News?</a>
+    <a href="#padlet" class="day">Tue · Padlet post</a>
+    <a href="#ai" class="day">AI search coach</a>
+    <a href="#debate" class="day">Thu · Debate</a>
+    <a href="#record" class="day">Thu · Record</a>
+  </div>
+</nav>
+
+<main>
+<!-- 01 -->
+<section id="how">
+  <div class="container">
+    <h2><span class="num">01</span>How to Use This Page</h2>
+    <p>On Monday you rewrote <strong>SQ3</strong>: <em>What is being done, or could be done?</em> This week you find the evidence.</p>
+    <div class="days3">
+      <div class="card day-card tint-teal">
+        <span class="tag">Tuesday · Padlet source hunt</span>
+        <h4>Find one. Post one.</h4>
+        <ol>
+          <li>Open your topic in the <strong>source hub</strong> below.</li>
+          <li>Pick <strong>one</strong> source that helps answer your SQ3.</li>
+          <li>Check it: is it <strong>Official</strong> (Slot B) or <strong>News</strong> (Slot C)?</li>
+          <li>Post it in the right Padlet column, using the <strong>post template</strong>.</li>
+          <li>Reply to one classmate: <em>"Which source shows that?"</em></li>
+        </ol>
+      </div>
+      <div class="card day-card tint-sand">
+        <span class="tag">Thursday · Debate + research</span>
+        <h4>Argue it. Record it.</h4>
+        <ol>
+          <li>5 min: fill in your <strong>debate prep card</strong>.</li>
+          <li>30 min: debate. <strong>Every claim names its source.</strong></li>
+          <li>The rest: finish <strong>Slots B and C</strong> in your dossier.</li>
+          <li>Oral check with your teacher: <em>"Why did this earn its slot?"</em></li>
+        </ol>
+      </div>
+    </div>
+    <h3>Which slot does each type of solution usually live in?</h3>
+    <table class="map">
+      <thead><tr><th>Type of solution</th><th>Who decides</th><th>Where the evidence usually is</th></tr></thead>
+      <tbody>
+        <tr><td><span class="chip c-dip">Diplomacy</span></td><td>Countries, together</td><td><strong>Slot B</strong>: UN agencies, international agreements</td></tr>
+        <tr><td><span class="chip c-reg">Regulation</span></td><td>One government</td><td><strong>Slot B</strong>: ministries, national agencies, courts</td></tr>
+        <tr><td><span class="chip c-bus">Business &amp; tech</span></td><td>Companies, markets</td><td><strong>Slot B</strong> (a company speaking for itself) or <strong>Slot C</strong> (news about it)</td></tr>
+        <tr><td><span class="chip c-gra">Grassroots</span></td><td>Citizens, communities</td><td><strong>Slot C</strong> (news), or later <strong>Slot D</strong> (voices)</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- 02 HUB -->
+<section id="hub">
+  <div class="container">
+    <h2><span class="num">02</span>Source Hub</h2>
+    <p>Choose your topic. Each card is a <strong>checked starting point</strong> for one type of solution, with a search you can use to find a <strong>News</strong> source on the same thing. You don't have to use these. They show you what a good source looks like.</p>
+
+    <div class="topics">
+      <button class="topic" aria-pressed="false" data-topic="coral"><div class="ico">🐠</div><h4>Coral reefs</h4><p>Who is protecting reefs?</p></button>
+      <button class="topic" aria-pressed="false" data-topic="sahel"><div class="ico">🌾</div><h4>The Sahel</h4><p>Who is holding back the desert?</p></button>
+      <button class="topic" aria-pressed="false" data-topic="glacier"><div class="ico">🏔️</div><h4>Glaciers &amp; the Arctic</h4><p>Who is responding to the melt?</p></button>
+    </div>
+    <p style="font-size:0.88rem;text-align:center;">Own issue? Read any panel as a model, then use the <strong>AI search coach</strong> (section 05) to plan your own searches.</p>
+
+    <!-- CORAL -->
+    <div class="panel" id="panel-coral">
+      <div class="prompt"><span class="tag">SQ3 thinking</span>Who is trying to protect or restore reefs? Is it working, and who benefits?</div>
+      <div class="cats">
+        <div class="src-card">
+          <div class="top"><span class="chip c-dip">Diplomacy</span><span class="slot">Slot B · UN</span></div>
+          <a class="ttl" href="https://globalfundcoralreefs.org/about/" target="_blank" rel="noopener">Global Fund for Coral Reefs: About</a>
+          <span class="who">A UN fund backed by several governments and private investors</span>
+          <span class="look"><b>Look for:</b> what it pays for (reef businesses, protected areas, communities) and in which countries.</span>
+          <span class="news">coral reef fund UN investment communities</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-reg">Regulation</span><span class="slot">Slot B · Government</span></div>
+          <a class="ttl" href="https://www.gbrmpa.gov.au/access/zoning/how-it-works" target="_blank" rel="noopener">How Marine Park zoning works (Great Barrier Reef Marine Park Authority)</a>
+          <span class="who">Australian government agency</span>
+          <span class="look"><b>Look for:</b> what is banned in "green zones", and who needs permission to fish.</span>
+          <span class="news">Great Barrier Reef zoning fishing rules news</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-bus">Business &amp; tech</span><span class="slot">Slot B · Company</span></div>
+          <a class="ttl" href="https://coralvita.co/in-the-press/coral-vitas-revolutionary-approach-to-coral-restoration/" target="_blank" rel="noopener">Coral Vita: land-based coral farming</a>
+          <span class="who">A company in the Bahamas, writing about itself</span>
+          <span class="look"><b>Look for:</b> how it grows coral faster, and how it makes money. <b>Careful:</b> a company describing itself will present itself well.</span>
+          <span class="news">Coral Vita coral farm Bahamas</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-gra">Grassroots</span><span class="slot">Not B or C · NGO</span></div>
+          <a class="ttl" href="https://blueventures.org/who-we-are/madagascar/" target="_blank" rel="noopener">Blue Ventures in Madagascar: locally managed marine areas</a>
+          <span class="who">A conservation charity supporting fishing communities</span>
+          <span class="look"><b>Look for:</b> how communities manage their own fishing grounds. An NGO page isn't Official or News: find a news report on it for Slot C, or save it for Slot D.</span>
+          <span class="news">Madagascar community marine protected area octopus closures</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAHEL -->
+    <div class="panel" id="panel-sahel">
+      <div class="prompt"><span class="tag">SQ3 thinking</span>Who is trying to stop land from turning to desert, or to help people cope? Is it working, and who is left out?</div>
+      <div class="cats">
+        <div class="src-card">
+          <div class="top"><span class="chip c-dip">Diplomacy</span><span class="slot">Slot B · UN</span></div>
+          <a class="ttl" href="https://www.unccd.int/our-work/ggwi" target="_blank" rel="noopener">Great Green Wall Initiative (UN Convention to Combat Desertification)</a>
+          <span class="who">UN body; the Wall was launched by the African Union in 2007</span>
+          <span class="look"><b>Look for:</b> the 2030 goals (land, jobs, carbon) and how much money has been pledged.</span>
+          <span class="news">Great Green Wall progress 2026</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-reg">Regulation</span><span class="slot">Slot B · Governments</span></div>
+          <a class="ttl" href="https://ndcpartnership.org/knowledge-portal/good-practice-database/vulnerability-resilience-farmer-managed-natural-regeneration-niger" target="_blank" rel="noopener">Farmer Managed Natural Regeneration in Niger (NDC Partnership)</a>
+          <span class="who">A partnership of governments and international bodies</span>
+          <span class="look"><b>Look for:</b> how Niger's government used incentives rather than rules, and how many hectares re-greened.</span>
+          <span class="news">Niger farmers regreening trees government</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-bus">Business &amp; tech</span><span class="slot">Slot B · Development bank</span></div>
+          <a class="ttl" href="https://www.afdb.org/en/news-and-events/african-development-banks-desert-power-initiative-71072" target="_blank" rel="noopener">Desert to Power (African Development Bank)</a>
+          <span class="who">A bank owned by African and other governments, funding solar power</span>
+          <span class="look"><b>Look for:</b> the solar target for 2030, how many people it aims to reach, and which countries.</span>
+          <span class="news">Desert to Power solar Sahel progress</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-gra">Grassroots</span><span class="slot">Slot C · News</span></div>
+          <a class="ttl" href="https://news.mongabay.com/2018/06/farmer-managed-natural-regeneration-the-fastest-way-to-restore-trees-to-degraded-landscapes/" target="_blank" rel="noopener">Farmer-managed natural regeneration: the fastest way to restore trees? (Mongabay)</a>
+          <span class="who">An environmental news site, interviewing researchers</span>
+          <span class="look"><b>Look for:</b> what farmers themselves do, and what happens to crop yields. <b>Date check:</b> it's from 2018. Is it still recent enough?</span>
+          <span class="news">Sahel farmers regreening 2025</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- GLACIER -->
+    <div class="panel" id="panel-glacier">
+      <div class="prompt"><span class="tag">SQ3 thinking</span>Who is responding to melting ice: to slow it down, or to help people cope? Does it reach the people most affected?</div>
+      <div class="cats">
+        <div class="src-card">
+          <div class="top"><span class="chip c-dip">Diplomacy</span><span class="slot">Slot B · UN</span></div>
+          <a class="ttl" href="https://www.un-glaciers.org/en" target="_blank" rel="noopener">2025 International Year of Glaciers' Preservation (UNESCO &amp; WMO)</a>
+          <span class="who">UN agencies</span>
+          <span class="look"><b>Look for:</b> what the UN asked countries to do. Then ask: did a "year of awareness" change anything?</span>
+          <span class="news">International Year of Glaciers 2025 outcome</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-reg">Regulation</span><span class="slot">Slot B · Government</span></div>
+          <a class="ttl" href="https://toolkit.climate.gov/case-study/relocating-village-newtok-alaska-due-coastal-erosion" target="_blank" rel="noopener">Relocating the village of Newtok, Alaska (U.S. Climate Resilience Toolkit)</a>
+          <span class="who">U.S. government website</span>
+          <span class="look"><b>Look for:</b> who paid for the move, what it cost, and why no single agency was in charge.</span>
+          <span class="news">Newtok Mertarvik relocation funding</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-bus">Business &amp; tech</span><span class="slot">Slot B · Company</span></div>
+          <a class="ttl" href="https://climeworks.com/plant-mammoth" target="_blank" rel="noopener">Mammoth direct air capture plant, Iceland (Climeworks)</a>
+          <span class="who">The company, writing about its own plant</span>
+          <span class="look"><b>Look for:</b> how much CO₂ it is <em>designed</em> to capture each year. Then find the news search result below and compare.</span>
+          <span class="news">Climeworks Mammoth actual capture Heimildin</span>
+        </div>
+        <div class="src-card">
+          <div class="top"><span class="chip c-gra">Grassroots</span><span class="slot">Slot B · Government</span></div>
+          <a class="ttl" href="https://arctic.noaa.gov/report-card/report-card-2025/weaving-the-seen-and-unseen-stewarding-the-arctic-means-sustaining-indigenous-monitoring/" target="_blank" rel="noopener">Indigenous-led monitoring on St. Paul Island (NOAA Arctic Report Card 2025)</a>
+          <span class="who">Published by a U.S. government agency, written with Unangax̂ community members</span>
+          <span class="look"><b>Look for:</b> what the community does itself, and what funding it says is missing. A grassroots solution in an Official source.</span>
+          <span class="news">Indigenous Arctic communities climate monitoring</span>
+        </div>
+      </div>
+    </div>
+
+    <h3>Finding a good News source (Slot C)</h3>
+    <div class="callout"><span class="ic">📰</span><p><strong>Try:</strong> NRK, BBC, Reuters, AP, The Guardian, Al Jazeera, NPR, Mongabay, Down To Earth. <strong>Check the date:</strong> is it recent enough for your question? <strong>Follow the trail:</strong> if an article says "a UN report found…", click through. The article goes in Slot C, and the report might be your Slot B.</p></div>
+  </div>
+</section>
+
+<!-- 03 CHECK -->
+<section id="check">
+  <div class="container">
+    <h2><span class="num">03</span>Official, News, or Neither?</h2>
+    <p>Before you post, check what kind of source you have. Your credibility note answers four questions:</p>
+    <div class="checks4">
+      <div><b>Who?</b>Who made it? Is the organisation or author named?</div>
+      <div><b>Why?</b>To inform, to report, to sell, to campaign?</div>
+      <div><b>When?</b>Recent enough for your question?</div>
+      <div><b>What's missing?</b>Whose view isn't in it?</div>
+    </div>
+    <h3>Quick check</h3>
+    <p>Sort each source. You'll get feedback straight away.</p>
+    <div id="sorter"></div>
+    <p class="score" id="sort-score" aria-live="polite"></p>
+  </div>
+</section>
+
+<!-- 04 PADLET -->
+<section id="padlet">
+  <div class="container">
+    <h2><span class="num">04</span>Your Padlet Post <span class="when">Tuesday</span></h2>
+    <p>Post in the column for your <strong>type of solution</strong>. Use this structure. Here's a model:</p>
+    <div class="post">
+      <div class="row"><span class="k">Column</span>Business &amp; tech</div>
+      <div class="row"><span class="k">My issue · SQ3</span>Glaciers: can technology slow the melting by removing CO₂?</div>
+      <div class="row"><span class="k">Source · Slot</span>Heimildin (Icelandic news outlet), 15 May 2025 · <strong>Slot C</strong></div>
+      <div class="row"><span class="k">Credibility note</span>Written by investigative journalists, not the company, so they don't need Climeworks to look good. They compare the company's own figures with what was actually captured. Missing: a full reply from Climeworks.</div>
+      <div class="row"><span class="k">One fact</span>Climeworks' Mammoth plant was designed to capture 36,000 tonnes of CO₂ a year, but captured 105 tonnes in its first ten months (Grettisson and Alexandersson).</div>
+      <div class="row"><span class="k">Citation (MLA)</span>Grettisson, Valur, and Bjartmar Oddur Þeyr Alexandersson. "Climeworks' Capture Fails to Cover Its Own Emissions." <em>Heimildin</em>, 15 May 2025, heimildin.is/grein/24581/climeworks-capture-fails-to-cover-its-own-emissions/. Accessed 17 Nov. 2026.</div>
+    </div>
+    <div class="callout"><span class="ic">🔎</span><p>Notice the pairing: the company's own page (Slot B) says <em>designed to capture 36,000 tonnes</em>. The news investigation (Slot C) checks it. <strong>Two sources that disagree are more useful than two that agree.</strong></p></div>
+
+    <h3>Reply to one classmate</h3>
+    <p>No simple "I agree". Your reply does one of these:</p>
+    <div class="replies">
+      <div class="card"><h4>Add</h4><p>"A source I found also shows…"</p></div>
+      <div class="card"><h4>Challenge</h4><p>"Which source shows that?" / "Your source is from a company: what might it leave out?"</p></div>
+      <div class="card"><h4>Connect</h4><p>"This connects to my issue because…"</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 05 AI -->
+<section id="ai">
+  <div class="container">
+    <h2><span class="num">05</span>AI Search Coach</h2>
+    <p>You can use AI to <strong>plan where to look</strong>, not to do the looking or the thinking. School account only.</p>
+    <div class="light"><div class="l g">GREEN</div><div class="r"><ul><li>"What kinds of sources would answer this question: [your SQ3]? Where are they usually published?"</li><li>"Which UN agencies or government bodies deal with [your issue]?"</li></ul></div></div>
+    <div class="light"><div class="l y">YELLOW<br>(share link)</div><div class="r"><ul><li>Ask for search terms. <strong>Record them in your search trail</strong> and paste the chat link in your dossier's AI box.</li><li>Check every source AI names actually exists before you use it. AI can invent reports and links.</li></ul></div></div>
+    <div class="light"><div class="l rr">RED</div><div class="r"><ul><li>Asking AI to find, summarise or pick your source for you</li><li>Asking AI to write your Padlet post, credibility note or reply</li><li>Asking AI which side to take in Thursday's debate</li></ul></div></div>
+  </div>
+</section>
+
+<!-- 06 DEBATE -->
+<section id="debate">
+  <div class="container">
+    <h2><span class="num">06</span>Debate: Who Should Lead? <span class="when">Thursday</span></h2>
+    <p><strong>Governments</strong> or <strong>businesses</strong>: who should lead the way on environmental solutions? Start from the position you chose in Monday's options table. Use Padlet posts from any column as evidence.</p>
+    <div class="prep">
+      <span class="tag">Debate prep card · 5 min</span>
+      <div class="line"><b>My side:</b> ☐ Governments ☐ Businesses ☐ <em>Advanced:</em> neither should lead alone. The either/or is the problem.</div>
+      <div class="line"><b>Claim:</b> one sentence.</div>
+      <div class="line"><b>Reason 1 + source:</b> "…, as [source] shows."</div>
+      <div class="line"><b>Reason 2 + source:</b> "…, as [source] shows."</div>
+      <div class="line"><b>What will the other side say?</b> And my answer.</div>
+    </div>
+    <div class="callout"><span class="ic">⚖️</span><p><strong>The rule:</strong> every claim names its source. If someone can't answer <em>"Which source shows that?"</em>, the point doesn't count.</p></div>
+
+    <div class="bank">
+      <h3>Shared debate bank</h3>
+      <p style="font-size:0.9rem;">Sources anyone can use, whatever their issue.</p>
+      <h4 class="b-gov">For "governments should lead"</h4>
+      <a href="https://unfccc.int/process-and-meetings/the-paris-agreement" target="_blank" rel="noopener">The Paris Agreement (UNFCCC)<span>194 parties; aim: well below 2°C, pursuing 1.5°C. Official · UN</span></a>
+      <a href="https://www.cnbc.com/2026/01/02/evs-norway-new-car-sales-hit-96percent-electric-in-2025-as-tesla-dominates.html" target="_blank" rel="noopener">Norway: 96% of new cars electric in 2025 (CNBC)<span>What tax breaks achieved. News</span></a>
+      <h4 class="b-bus">For "businesses should lead"</h4>
+      <a href="https://www.equinor.com/news/20250825-first-co2-volumes-stored-at-northern-lights" target="_blank" rel="noopener">First CO₂ stored at Northern Lights (Equinor)<span>Companies storing CO₂ under the North Sea. Official · company</span></a>
+      <a href="https://blogs.microsoft.com/on-the-issues/2025/05/29/environmental-sustainability-report/" target="_blank" rel="noopener">Microsoft's 2025 Environmental Sustainability Report<span>Carbon-negative goal for 2030, but total emissions up 23.4% since 2020. Official · company</span></a>
+      <h4 class="b-both">For "it's more complicated"</h4>
+      <a href="https://www.cbc.ca/news/politics/mark-carney-drops-carbon-tax-1.7484290" target="_blank" rel="noopener">Carney scraps Canada's consumer carbon tax (CBC, March 2025)<span>Government rules can be reversed. News</span></a>
+      <a href="https://www.npr.org/2026/04/11/g-s1-114074/trees-africa-great-green-wall" target="_blank" rel="noopener">Is the Great Green Wall working? (NPR, April 2026)<span>Governments pledged billions; little reached the ground. News</span></a>
+      <a href="https://www.carbonbrief.org/cop30-key-outcomes-agreed-at-the-un-climate-talks-in-belem" target="_blank" rel="noopener">COP30: key outcomes (Carbon Brief)<span>What diplomacy agreed, and didn't, in Belém. News / analysis</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- 07 RECORD -->
+<section id="record">
+  <div class="container">
+    <h2><span class="num">07</span>Record Slots B &amp; C <span class="when">Thursday · after the debate</span></h2>
+    <p>Your Padlet post is a start, not a slot. Now fill <strong>Slot B · Official</strong> and <strong>Slot C · News</strong> in your dossier properly.</p>
+    <div class="fields">
+      <div class="field"><span class="mode type">Type now</span><h4>Extract</h4><p>Max <strong>250 words</strong> (or one visual with its caption), from the source itself.</p></div>
+      <div class="field"><span class="mode type">Type now</span><h4>Citation (MLA)</h4><p>Pattern below. Include the date you accessed it.</p></div>
+      <div class="field"><span class="mode type">Type now</span><h4>Search trail</h4><p>Search terms, where you searched, anything AI suggested.</p></div>
+      <div class="field"><span class="mode type">Type now</span><h4>A source I rejected</h4><p>What you looked at and <strong>why</strong> you didn't use it.</p></div>
+      <div class="field"><span class="mode hand">By hand</span><h4>✎ Why this earns the slot</h4><p>After printing: which SQ does it answer (probably <strong>SQ3</strong>), and how?</p></div>
+      <div class="field"><span class="mode hand">By hand</span><h4>✎ Can I trust it?</h4><p>After printing: who, why, when, and what's missing?</p></div>
+    </div>
+    <h3>MLA patterns</h3>
+    <div class="mla"><i>Organisation's web page:</i> "Title of Page." Organisation, date (if shown), URL. Accessed day Mon. year.</div>
+    <div class="mla">"Great Green Wall Initiative." United Nations Convention to Combat Desertification, www.unccd.int/our-work/ggwi. Accessed 19 Nov. 2026.</div>
+    <div class="mla"><i>News article:</i> Author Surname, First Name. "Headline." Publication, day Mon. year, URL. Accessed day Mon. year.</div>
+    <div class="callout"><span class="ic">🗣️</span><p><strong>Oral check:</strong> your teacher will ask <em>"Why did this earn its slot?"</em> Be ready to say which SQ it answers and why you trust it (or why you only partly trust it).</p></div>
+
+    <h3>Before Thursday ends</h3>
+    <ul class="checklist" role="list">
+      <li role="checkbox" aria-checked="false" tabindex="0">Slot B has an extract, MLA citation, search trail and a rejected source</li>
+      <li role="checkbox" aria-checked="false" tabindex="0">Slot C has an extract, MLA citation, search trail and a rejected source</li>
+      <li role="checkbox" aria-checked="false" tabindex="0">My dossier plan says which SQ each slot answers</li>
+      <li role="checkbox" aria-checked="false" tabindex="0">I pasted any AI chat links into the AI box</li>
+      <li role="checkbox" aria-checked="false" tabindex="0">I've done my oral check (or booked it)</li>
+    </ul>
+    <div class="card tint-teal" style="margin-top:1.8rem;">
+      <span class="tag" style="color:var(--teal)">Checkpoint · Thu 19 Nov</span>
+      <p style="color:var(--text)">Slots B and C complete. Next week: <strong>Voices</strong>, whose stories get heard, and Slot D.</p>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <p>Vanishing Points · MYP4 I&amp;S · Week 5: Solutions</p>
+  <p>Links checked 28 Sept 2026. Report broken links to your teacher.</p>
+</footer>
+
+<script>
+document.querySelectorAll('.topic').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.topic').forEach(x => x.setAttribute('aria-pressed', 'false'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    t.setAttribute('aria-pressed', 'true');
+    const panel = document.getElementById('panel-' + t.dataset.topic);
+    panel.classList.add('active');
+    setTimeout(() => panel.scrollIntoView({ behavior: 'smooth', block: 'start' }), 120);
+  });
+});
+const items = [
+  { s: 'An Equinor press release about storing CO₂ under the North Sea', a: 'B', fb: 'Official (Slot B): a company speaking for itself. Its purpose is to look good, so say so in your credibility note.' },
+  { s: 'An Icelandic news investigation into how much CO₂ Climeworks really captured', a: 'C', fb: 'News (Slot C): journalists checking a company\'s claims.' },
+  { s: 'The Great Barrier Reef Marine Park Authority\'s page on zoning rules', a: 'B', fb: 'Official (Slot B): a government agency.' },
+  { s: 'A Wikipedia article on the Great Green Wall', a: 'N', fb: 'Neither. Use Wikipedia to find sources: scroll to the references and follow them.' },
+  { s: 'An NPR article asking whether the Great Green Wall is working', a: 'C', fb: 'News (Slot C). It quotes funding figures: follow them back to the original report.' },
+  { s: 'A charity\'s page about community fishing areas in Madagascar', a: 'N', fb: 'Neither B nor C: an NGO. It could fit Slot D (Voices) or the wildcard slot, or lead you to a news report.' },
+  { s: 'A TikTok explaining carbon capture', a: 'N', fb: 'Neither. No clear author or evidence. Find the organisation it\'s talking about instead.' }
+];
+const sorter = document.getElementById('sorter');
+let answered = 0, correct = 0;
+items.forEach(it => {
+  const d = document.createElement('div');
+  d.className = 'sort-item';
+  d.innerHTML = `<div class="src">${it.s}</div><div class="sort-btns"><button data-v="B">Official (B)</button><button data-v="C">News (C)</button><button data-v="N">Neither</button></div><div class="sort-fb" aria-live="polite"></div>`;
+  d.querySelectorAll('button').forEach(b => b.addEventListener('click', () => {
+    if (d.dataset.done) return;
+    d.dataset.done = '1';
+    const ok = b.dataset.v === it.a;
+    answered++; if (ok) correct++;
+    const fb = d.querySelector('.sort-fb');
+    fb.className = 'sort-fb show ' + (ok ? 'ok' : 'no');
+    fb.textContent = (ok ? '✓ ' : 'Not quite. ') + it.fb;
+    b.style.borderColor = ok ? 'var(--olive)' : 'var(--sand)';
+    document.getElementById('sort-score').textContent = `${correct} / ${answered} so far` + (answered === items.length ? '. Done.' : '');
+  }));
+  sorter.appendChild(d);
+});
+document.querySelectorAll('.checklist li').forEach(li => {
+  const toggle = () => li.setAttribute('aria-checked', li.getAttribute('aria-checked') === 'true' ? 'false' : 'true');
+  li.addEventListener('click', toggle);
+  li.addEventListener('keydown', e => { if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); toggle(); } });
+});
+</script>
+</body>
+</html>
